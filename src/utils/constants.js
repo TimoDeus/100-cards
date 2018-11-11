@@ -1,0 +1,7 @@
+export const UPWARDS_A = 'UPWARDS_A'
+export const UPWARDS_B = 'UPWARDS_B'
+export const DOWNWARDS_A = 'DOWNWARDS_A'
+export const DOWNWARDS_B = 'DOWNWARDS_B'
+export const DECK = 'DECK'
+export const HAND = 'HAND'
+export const CARDS_LEFT = 'CARDS_LEFT'
