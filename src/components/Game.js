@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
-import { CARDS_LEFT, DECK, DOWNWARDS_A, DOWNWARDS_B, HAND, UPWARDS_A, UPWARDS_B } from '../utils/constants'
+import React, {Component} from 'react'
+import {DOWNWARDS_A, DOWNWARDS_B, UPWARDS_A, UPWARDS_B} from '../utils/constants'
 import Card from './Card'
-import { connect } from 'react-redux'
-import { drawCards, playCard, prepareGame } from '../actions/game'
-import { drawCardError, playCardError } from '../utils/gameRules'
+import {connect} from 'react-redux'
+import {drawCards, playCard, prepareGame} from '../actions/game'
+import {drawCardError, playCardError} from '../utils/gameRules'
 
 class Game extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       cardsPlayed: 0,
@@ -14,14 +14,14 @@ class Game extends Component {
     }
   }
 
-  setSelected (card) {
-    this.setState({ selected: card })
+  setSelected(card) {
+    this.setState({selected: card})
   }
 
-  playCard (stash) {
+  playCard(stash) {
     const error = playCardError(this.state.selected, stash, this.props[stash])
     if (error) {
-      this.setState({ error })
+      this.setState({error})
     } else {
       this.props.doPlayCard(this.state.selected, stash)
       this.setState(prevState => ({
@@ -31,32 +31,32 @@ class Game extends Component {
     }
   }
 
-  drawCardHandler () {
-    const error = drawCardError(this.state.cardsPlayed, this.props[DECK].length)
+  drawCardHandler() {
+    const error = drawCardError(this.state.cardsPlayed, this.props.deckSize)
     if (error) {
-      this.setState({ error })
+      this.setState({error})
     } else {
       this.props.doDrawCards(this.state.cardsPlayed)
-      this.setState({ cardsPlayed: 0, error })
+      this.setState({cardsPlayed: 0, error})
     }
   }
 
-  isGameOver () {
+  isGameOver() {
     return this.state.selected &&
-      drawCardError(this.state.cardsPlayed, this.props[CARDS_LEFT]) &&
+      drawCardError(this.state.cardsPlayed, this.props.cardsLeft) &&
       playCardError(this.state.selected, UPWARDS_A, this.props[UPWARDS_A]) &&
       playCardError(this.state.selected, UPWARDS_B, this.props[UPWARDS_B]) &&
       playCardError(this.state.selected, DOWNWARDS_A, this.props[DOWNWARDS_A]) &&
       playCardError(this.state.selected, DOWNWARDS_B, this.props[DOWNWARDS_B])
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.props.doPrepareGame()
   }
 
-  render () {
-    return this.props[HAND] ? (
-      this.isGameOver() ? <div>Game over, {this.props[CARDS_LEFT]} cards left.</div> : (
+  render() {
+    return this.props.hand ? (
+      this.isGameOver() ? <div>Game over, {this.props.cardsLeft} cards left.</div> : (
         <div>
           <div>
             <Card onClick={() => this.playCard(UPWARDS_A)}>^ {this.props[UPWARDS_A]}</Card>
@@ -66,10 +66,10 @@ class Game extends Component {
           </div>
           < div>My Hand:</div>
           <div>
-            {this.props[HAND].map(card => <Card onClick={() => this.setSelected(card)}>{card}</Card>)}
+            {this.props.hand.map(card => <Card onClick={() => this.setSelected(card)}>{card}</Card>)}
           </div>
           <div>Played {this.state.cardsPlayed || 'no'} cards this round</div>
-          <div>{this.props[CARDS_LEFT]} cards left, {this.props[DECK].length} left on deck</div>
+          <div>{this.props.cardsLeft} cards left, {this.props.deckSize} left on deck</div>
           <button onClick={() => this.drawCardHandler()}>End round</button>
           <div>{this.state.error}</div>
         </div>
@@ -83,8 +83,8 @@ const mapDispatchToProps = dispatch => ({
   doDrawCards: amount => dispatch(drawCards(amount))
 })
 
-const mapStateToProps = ({ game: { DECK, HAND, UPWARDS_A, UPWARDS_B, DOWNWARDS_A, DOWNWARDS_B, CARDS_LEFT } }) => ({
-  DECK, HAND, UPWARDS_B, UPWARDS_A, DOWNWARDS_B, DOWNWARDS_A, CARDS_LEFT
+const mapStateToProps = ({game: {deck, deckSize, hand, upA, upB, downA, downB, cardsLeft}}) => ({
+  deck, hand, deckSize, upA, upB, downA, downB, cardsLeft
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game)

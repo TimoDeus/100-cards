@@ -1,5 +1,5 @@
-import { drawFromDeck, getInitialDeck } from '../utils/cardUtils'
-import { CARDS_LEFT, DECK, DOWNWARDS_A, DOWNWARDS_B, HAND, UPWARDS_A, UPWARDS_B } from '../utils/constants'
+import {drawFromDeck, getInitialDeck} from '../utils/cardUtils'
+import uuid from 'uuid/v4'
 
 export const PREPARE_GAME = 'PREPARE_GAME'
 export const PLAY_CARD = 'PLAY_CARD'
@@ -11,13 +11,15 @@ export const prepareGame = () => dispatch => {
   return dispatch({
     type: PREPARE_GAME,
     payload: {
-      [DECK]: deck,
-      [HAND]: hand,
-      [UPWARDS_A]: 1,
-      [UPWARDS_B]: 1,
-      [DOWNWARDS_A]: 100,
-      [DOWNWARDS_B]: 100,
-      [CARDS_LEFT]: 98
+      id: uuid(),
+      upA: 1,
+      upB: 1,
+      downA: 100,
+      downB: 100,
+      cardsLeft: 98,
+      deckSize: deck.length,
+      deck,
+      hand
     }
   })
 }
