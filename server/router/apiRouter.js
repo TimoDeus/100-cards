@@ -1,7 +1,7 @@
 const { Router } = require('express')
-const BaseController = require('../controller/ExampleController')
+const GameController = require('../controller/GameController')
 
 const router = Router()
-router.use('/', BaseController)
+router.use('/game', GameController)
 
 module.exports = router
