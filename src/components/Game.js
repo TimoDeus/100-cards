@@ -55,21 +55,19 @@ class Game extends Component {
   }
 
   render() {
-    return this.props.hand ? (
-      this.isGameOver() ? <div>Game over, {this.props.cardsLeft} cards left.</div> : (
+    const {game} = this.props
+    return game.hand ? (
+      this.isGameOver() ? <div>Game over, {game.cardsLeft} cards left.</div> : (
         <div>
           <div>
-            <Card onClick={() => this.playCard(UPWARDS_A)}>^ {this.props[UPWARDS_A]}</Card>
-            <Card onClick={() => this.playCard(UPWARDS_B)}>^ {this.props[UPWARDS_B]}</Card>
-            <Card onClick={() => this.playCard(DOWNWARDS_A)}>v {this.props[DOWNWARDS_A]}</Card>
-            <Card onClick={() => this.playCard(DOWNWARDS_B)}>v {this.props[DOWNWARDS_B]}</Card>
+            {game.stashes.map(stash => <Card onClick={() => this.playCard(stash.name)}>{stash.isUpwards ? '^' : 'v'} {stash.value}</Card>)}
           </div>
           < div>My Hand:</div>
           <div>
-            {this.props.hand.map(card => <Card onClick={() => this.setSelected(card)}>{card}</Card>)}
+            {game.hand.map(card => <Card onClick={() => this.setSelected(card)}>{card}</Card>)}
           </div>
           <div>Played {this.state.cardsPlayed || 'no'} cards this round</div>
-          <div>{this.props.cardsLeft} cards left, {this.props.deckSize} left on deck</div>
+          <div>{game.cardsLeft} cards left, {game.deckSize} left on deck</div>
           <button onClick={() => this.drawCardHandler()}>End round</button>
           <div>{this.state.error}</div>
         </div>
@@ -83,8 +81,6 @@ const mapDispatchToProps = dispatch => ({
   doDrawCards: amount => dispatch(drawCards(amount))
 })
 
-const mapStateToProps = ({game: {deck, deckSize, hand, upA, upB, downA, downB, cardsLeft}}) => ({
-  deck, hand, deckSize, upA, upB, downA, downB, cardsLeft
-})
+const mapStateToProps = ({game}) => ({game})
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game)

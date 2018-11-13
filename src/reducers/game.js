@@ -1,28 +1,28 @@
-import {DRAW_FROM_DECK, PLAY_CARD, PREPARE_GAME} from '../actions/game'
-import {drawFromDeck} from '../utils/cardUtils'
+import {DRAW_FROM_DECK, PLAY_CARD, PREPARE_GAME, START_GAME} from '../actions/game'
 
 export const game = (state = {}, action) => {
+  const {payload} = action
   switch (action.type) {
     case PREPARE_GAME:
-      return {...state, ...action.payload}
+      return {...state, ...payload}
+    case START_GAME:
+      return {...state, ...payload}
     case PLAY_CARD:
       return {
         ...state,
         ...{
-          [action.payload.stash]: action.payload.card,
-          hand: state.hand.filter(e => e !== action.payload.card),
+          [payload.stash]: payload.card,
+          hand: state.hand.filter(e => e !== payload.card),
           cardsLeft: state.cardsLeft - 1
         }
       }
     case DRAW_FROM_DECK: {
-      const deck = [...state.deck]
-      const newCards = drawFromDeck(deck, action.payload.amount)
+      const {cards, deckSize} = payload
       return {
         ...state,
         ...{
-          hand: [...state.hand, ...newCards].sort(),
-          deck: deck,
-          deckSize: deck.length
+          hand: [...state.hand, ...cards],
+          deckSize
         }
       }
     }

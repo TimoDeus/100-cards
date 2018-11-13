@@ -1,2 +1,5 @@
 const createUrl = path => new URL(path, process.env.REACT_APP_API_BASE_URL).toString()
 export const prepareGameUrl = createUrl('game/prepare')
+export const startGameUrl = createUrl('game/start')
+export const playCardUrl = createUrl('game/playCard')
+export const drawCardsUrl = createUrl('game/drawCards')
