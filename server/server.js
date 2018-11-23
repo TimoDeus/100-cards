@@ -1,17 +1,15 @@
 require('dotenv').config()
-const express = require('express')
-const bodyParser = require('body-parser')
-const apiRouter = require('./router/apiRouter')
-const cors = require('cors')
+const io = require('socket.io')()
+const {CONNECTION, REQUEST_NEW_ROOM, NEW_ROOM_CREATED} = require('../src/shared/events')
 
 const PORT = process.env.REACT_APP_BACKEND_PORT || 3001
 
-const app = express()
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(cors())
-app.use('/api', apiRouter)
+io.listen(PORT);
 
-app.listen(PORT, () => {
-  console.log('Backend listening on port ' + PORT)
-})
+console.log('Socket.io listening on port ', PORT);
+
+io.on(CONNECTION, socket => {
+  socket.on(REQUEST_NEW_ROOM, () => {
+    socket.emit(NEW_ROOM_CREATED, 'foobar')
+  });
+});

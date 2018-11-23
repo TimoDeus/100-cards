@@ -1,10 +1,10 @@
 import React from 'react'
 import { Route, Switch } from 'react-router'
-import Game from './components/Game'
+import Home from './containers/Home'
 
 export const App = () => (
   <Switch>
-    <Route path="/" exact={true} component={Game}/>
+    <Route path="/" exact={true} component={Home}/>
   </Switch>
 )
 

@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {DOWNWARDS_A, DOWNWARDS_B, UPWARDS_A, UPWARDS_B} from '../utils/constants'
 import Card from './Card'
 import {connect} from 'react-redux'
-import {drawCards, playCard, prepareGame} from '../actions/game'
+import {drawCards, playCard} from '../actions/game'
 import {drawCardError, playCardError} from '../utils/gameRules'
 
 class Game extends Component {
@@ -51,7 +51,6 @@ class Game extends Component {
   }
 
   componentDidMount() {
-    this.props.doPrepareGame()
   }
 
   render() {
@@ -76,7 +75,7 @@ class Game extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  doPrepareGame: () => dispatch(prepareGame()),
+  // doPrepareGame: () => dispatch(prepareGame()),
   doPlayCard: (card, stash) => dispatch(playCard(card, stash)),
   doDrawCards: amount => dispatch(drawCards(amount))
 })
